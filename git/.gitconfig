@@ -1,0 +1,82 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║                                  GITCONFIG                                   ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+[user]
+	# IMPORTANTE: Cambia estos valores por los tuyos
+	email = tu_email@ejemplo.com
+	name = Tu Nombre
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │                              CORE                                            │
+# └──────────────────────────────────────────────────────────────────────────────┘
+[core]
+	editor = vim                    # Editor para commits y rebase interactivo
+	autocrlf = input                # Normalizar CRLF→LF al añadir, mantener LF al checkout
+	pager = less -FR                # Paginador mejorado
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │                           PULL / PUSH / FETCH                                │
+# └──────────────────────────────────────────────────────────────────────────────┘
+[pull]
+	rebase = true                   # git pull hace rebase en vez de merge
+
+[push]
+	default = current               # Push a rama con el mismo nombre
+	autoSetupRemote = true          # Crear rama remota automáticamente
+
+[fetch]
+	prune = true                    # Eliminar ramas remotas borradas
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │                              DIFF / MERGE                                    │
+# └──────────────────────────────────────────────────────────────────────────────┘
+[diff]
+	colorMoved = zebra              # Destacar líneas movidas con colores alternos
+
+[merge]
+	conflictstyle = diff3           # Mostrar BASE + LOCAL + REMOTE en conflictos
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │                              COLORES                                         │
+# └──────────────────────────────────────────────────────────────────────────────┘
+[color]
+	ui = auto
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │                              ALIASES                                         │
+# │  Uso: git <alias>                                                            │
+# └──────────────────────────────────────────────────────────────────────────────┘
+[alias]
+	# === Básicos ===
+	st = status
+	co = checkout
+	br = branch
+	ci = commit
+	
+	# === Log bonito ===
+	l = log --pretty=format:'%C(auto)%h %Cblue%ad%Creset %<(80)%s%C(auto)%d %Cgreen%an%Creset' --abbrev-commit --graph --decorate --topo-order --date=short
+	lg = log --oneline --graph --decorate -20
+	lga = log --oneline --graph --decorate --all -30
+	
+	# === Commits ===
+	amend = commit --amend --date=now --no-edit
+	undo = reset --soft HEAD~1      # Deshacer último commit (mantiene cambios staged)
+	
+	# === Staging ===
+	unstage = reset HEAD --         # Quitar archivos del stage
+	discard = checkout --           # Descartar cambios locales
+	
+	# === Info rápida ===
+	last = log -1 HEAD --stat       # Ver último commit con archivos
+	branches = branch -a            # Ver todas las ramas
+	remotes = remote -v             # Ver remotos
+	tags = tag -l                   # Ver tags
+	
+	# === Stash ===
+	save = stash push -m            # Guardar con mensaje: git save "mensaje"
+	pop = stash pop
+	
+	# === Utilidades ===
+	aliases = config --get-regexp alias   # Mostrar todos los aliases
+	whoami = config user.email            # Ver email configurado

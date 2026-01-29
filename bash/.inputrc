@@ -1,0 +1,56 @@
+# ============== INPUTRC - AUTOCOMPLETADO INTELIGENTE ==============
+
+# Autocompletado case-insensitive (mayúsculas/minúsculas)
+set completion-ignore-case on
+
+# Mostrar todos los matches con un solo TAB
+set show-all-if-ambiguous on
+
+# Colorear archivos según tipo en autocompletado
+set colored-stats on
+
+# Añadir / a directorios y * a ejecutables
+set visible-stats on
+
+# No hacer beep molesto
+set bell-style none
+
+# Mostrar prefijo común antes de listar alternativas
+set show-all-if-unmodified on
+
+# Paginación al mostrar muchas opciones
+set page-completions off
+
+# Completar nombres de directorios con /
+set mark-directories on
+set mark-symlinked-directories on
+
+# ============== ATAJOS DE TECLADO ==============
+
+# Buscar en historial con flechas arriba/abajo
+# Escribe "git" + ↑ para buscar comandos que empiecen con "git"
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+
+# Ctrl+← y Ctrl+→ para moverse por palabras
+"\e[1;5C": forward-word
+"\e[1;5D": backward-word
+
+# Alt+← y Alt+→ también para moverse por palabras
+"\e[1;3C": forward-word
+"\e[1;3D": backward-word
+
+# Alt+. para insertar último argumento del comando anterior
+"\e.": yank-last-arg
+
+# Ctrl+L limpia pantalla (ya está por defecto, pero lo reforzamos)
+"\C-l": clear-screen
+
+# Ctrl+U borra desde cursor hasta inicio de línea
+"\C-u": unix-line-discard
+
+# Ctrl+W borra palabra anterior
+"\C-w": unix-word-rubout
+
+# Incluir configuración del sistema si existe
+$include /etc/inputrc
