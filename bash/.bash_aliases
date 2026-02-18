@@ -11,11 +11,12 @@ alias ~='cd ~'
 alias -- -='cd -'  # volver al directorio anterior
 
 # === LS MEJORADO ===
-alias ll='ls -lah --color=auto'
-alias la='ls -A --color=auto'
-alias l='ls -CF --color=auto'
-alias lt='ls -lhtr --color=auto'        # ordenados por fecha (más reciente al final)
-alias lsize='ls -lhS --color=auto'      # ordenados por tamaño
+# Nota: --color=auto ya lo hereda de 'alias ls' definido en .bashrc
+alias ll='ls -lah'
+alias la='ls -A'
+alias l='ls -CF'
+alias lt='ls -lhtr'                     # ordenados por fecha (más reciente al final)
+alias lsize='ls -lhS'                   # ordenados por tamaño
 
 # === GIT SHORTCUTS ===
 alias gs='git status'
@@ -69,11 +70,9 @@ alias topmem='ps aux --sort=-%mem | head -10'
 
 # === MEJORAS DE COMANDOS BÁSICOS ===
 alias df='df -h'
-alias du='du -h'
+alias du='du -shc'
 alias free='free -h'
-alias grep='grep --color=auto'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
+# Nota: grep/fgrep/egrep --color=auto ya definidos en .bashrc (sección dircolors)
 alias diff='diff --color=auto'
 alias mkdir='mkdir -pv'
 alias wget='wget -c'  # continuar descargas

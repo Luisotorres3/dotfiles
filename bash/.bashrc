@@ -166,7 +166,17 @@ alias la='ls -A'
 alias l='ls -CF'
 
 # Notificación para comandos largos: sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+# Usa beep + mensaje en terminal (compatible con WSL)
+alert() {
+    local rc=$?
+    local cmd=$(history | tail -n1 | sed 's/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//')
+    echo -ne "\a"
+    if [ $rc -eq 0 ]; then
+        echo "✅ Completado: $cmd"
+    else
+        echo "❌ Error ($rc): $cmd"
+    fi
+}
 
 # Cargar aliases personalizados desde archivo separado
 if [ -f ~/.bash_aliases ]; then
@@ -220,14 +230,14 @@ backup() {
     fi
 }
 
-# fcd: buscar directorio y entrar (fuzzy find)
-# Uso: fcd nombre_parcial
+# fcd: buscar directorio interactivamente con fzf
+# Uso: fcd [ruta_base]  (por defecto busca desde .)
 fcd() {
-    local dir=$(find . -type d -name "*$1*" 2>/dev/null | head -1)
+    local dir
+    dir=$(find "${1:-.}" -type d 2>/dev/null | fzf --height 40% --reverse --preview 'ls -la {}')
     if [ -n "$dir" ]; then
         cd "$dir" && pwd
     else
-        echo "No se encontró directorio con '$1'"
         return 1
     fi
 }
@@ -238,16 +248,15 @@ gclone() {
     git clone "$1" && cd "$(basename "$1" .git)"
 }
 
-# search: buscar texto en archivos recursivamente
+# search: buscar texto en archivos recursivamente con ripgrep
 # Uso: search "texto" [directorio]
+# Fallback a grep si rg no está disponible
 search() {
-    grep -rn --color=auto "$1" "${2:-.}"
-}
-
-# sizeof: mostrar tamaño de archivo/directorio
-# Uso: sizeof carpeta/
-sizeof() {
-    du -sh "$1" 2>/dev/null
+    if command -v rg &>/dev/null; then
+        rg --smart-case "$1" "${2:-.}"
+    else
+        grep -rn --color=auto "$1" "${2:-.}"
+    fi
 }
 
 # weather: ver el tiempo actual
