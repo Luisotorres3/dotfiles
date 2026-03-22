@@ -133,22 +133,24 @@ __build_prompt() {
 # │  Muestra el comando actual mientras se ejecuta                               │
 # └──────────────────────────────────────────────────────────────────────────────┘
 
-ORIGINAL_TAB_TITLE="Terminal"  # Personaliza esto
+ORIGINAL_TAB_TITLE="$(basename "$PWD")"  # Nombre de la carpeta actual
 
 # Establecer título de pestaña
 __set_tab_title() {
     echo -ne "\033]0;$1\007"
 }
 
-# Antes de ejecutar un comando: mostrar nombre del comando en la pestaña
+# Antes de ejecutar un comando: mostrar "comando - carpeta" en la pestaña
 __before_command() {
-    local cmd=$(history 1 | sed 's/ *[0-9]* *//')
-    __set_tab_title "${cmd%% *}"
+    local cmd="$BASH_COMMAND"
+    # Ignorar comandos internos (funciones que empiezan con __)
+    [[ "$cmd" =~ ^__ ]] && return
+    __set_tab_title "${cmd%% *} - $(basename "$PWD")"
 }
 
-# Después de ejecutar un comando: restaurar título original
+# Después de ejecutar un comando: restaurar título a nombre de carpeta actual
 __after_command() {
-    __set_tab_title "$ORIGINAL_TAB_TITLE"
+    __set_tab_title "$(basename "$PWD")"
 }
 
 # Enganchar funciones
@@ -295,6 +297,9 @@ if [ -f ~/.bashrc.local ]; then
     source ~/.bashrc.local
 fi
 
+# Inicializar título de pestaña con nombre de carpeta actual
+__set_tab_title "$(basename "$PWD")"
+
 # ┌──────────────────────────────────────────────────────────────────────────────┐
 # │                      11. HERRAMIENTAS ADICIONALES                            │
 # └──────────────────────────────────────────────────────────────────────────────┘
@@ -306,6 +311,14 @@ fi
 
 # Less - mejor visualización
 export LESS="-IR"
+
+# fzf - key bindings y completion
+source /usr/share/doc/fzf/examples/key-bindings.bash
+source /usr/share/bash-completion/completions/fzf
+
+# fzf - opciones por defecto con preview
+export FZF_DEFAULT_OPTS="--height 40% --layout reverse --preview 'bat --style=numbers --color=always {} 2>/dev/null || cat {}' --bind 'ctrl-y:execute-silent(echo {} | clip.exe)+abort'"
+export FZF_DEFAULT_COMMAND='fdfind --type f'
 
 # ┌──────────────────────────────────────────────────────────────────────────────┐
 # │                              FIN DE .bashrc                                  │

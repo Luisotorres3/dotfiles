@@ -32,9 +32,20 @@ cd ~/dotfiles
 ```
 
 El script:
-1. Hace backup de tus archivos actuales
-2. Crea symlinks a los dotfiles
-3. Crea `~/.bashrc.local` para configuración específica de máquina
+1. **Instala dependencias necesarias** (lsd, fzf, ripgrep, etc.)
+2. Hace backup de tus archivos actuales
+3. Crea symlinks a los dotfiles
+4. Crea `~/.bashrc.local` para configuración específica de máquina
+
+### 🔧 Dependencias
+
+El script instala automáticamente las siguientes herramientas si no están presentes:
+
+- **Requeridas**: curl, git, vim, less
+- **Recomendadas**: lsd (ls moderno), fzf (búsqueda fuzzy), ripgrep (búsqueda rápida)
+- **Opcionales**: unzip, p7zip, unrar (para función extract)
+
+Si alguna herramienta no se puede instalar automáticamente, el script continúa pero mostrará una advertencia.
 
 ## 📁 Estructura
 

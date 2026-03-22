@@ -17,6 +17,8 @@ alias la='ls -A'
 alias l='ls -CF'
 alias lt='ls -lhtr'                     # ordenados por fecha (más reciente al final)
 alias lsize='ls -lhS'                   # ordenados por tamaño
+alias ls='lsd'                          # usar lsd en lugar de ls estándar
+alias lsd='lsd --icon-theme fancy'      # lsd con iconos bonitos
 
 # === GIT SHORTCUTS ===
 alias gs='git status'
