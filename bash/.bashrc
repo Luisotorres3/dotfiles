@@ -273,6 +273,40 @@ cheat() {
     curl -s "cheat.sh/$1"
 }
 
+# grepo: abrir repositorio de GitHub del directorio actual
+# Uso: grepo (desde dentro de un repo git)
+grepo() {
+    local url=$(git config --get remote.origin.url 2>/dev/null)
+    
+    if [ -z "$url" ]; then
+        echo "❌ Error: No se encontró repositorio remoto"
+        return 1
+    fi
+    
+    # Convertir SSH a HTTPS si es necesario
+    url=${url//git@github.com:/https:\/\/github.com\/}
+    url=${url%.git}
+    
+    # Abrir en navegador (detectar sistema)
+    if command -v wslpath &>/dev/null; then
+        # WSL: usar cmd.exe /c start
+        (cmd.exe /c start "" "$url" 2>/dev/null &) &>/dev/null
+        echo "✓ Abriendo repositorio en navegador..."
+    elif [ "$(uname)" = "Darwin" ]; then
+        # macOS: usar open
+        (/usr/bin/open "$url" 2>/dev/null &) &>/dev/null
+        echo "✓ Abriendo repositorio en navegador..."
+    elif command -v xdg-open &>/dev/null; then
+        # Linux: usar xdg-open
+        (nohup xdg-open "$url" >/dev/null 2>&1 &) &>/dev/null
+        echo "✓ Abriendo repositorio en navegador..."
+    else
+        echo "⚠ No se encontró navegador"
+        echo "📋 URL: $url"
+        return 1
+    fi
+}
+
 # ┌──────────────────────────────────────────────────────────────────────────────┐
 # │                         9. AUTOCOMPLETADO                                    │
 # └──────────────────────────────────────────────────────────────────────────────┘
